@@ -1,4 +1,4 @@
-package psy.sigmal.gui;
+package psy.simal.gui;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;

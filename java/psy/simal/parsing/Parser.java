@@ -1,8 +1,8 @@
-package psy.sigmal.parsing;
+package psy.simal.parsing;
 
 import java.util.ArrayDeque;
 
-import psy.sigmal.parsing.Token.TokenType;
+import psy.simal.parsing.Token.TokenType;
 
 public class Parser{
 	private ArrayDeque<Token> tokens;

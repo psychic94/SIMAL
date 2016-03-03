@@ -1,4 +1,4 @@
-package psy.sigmal.gui;
+package psy.simal.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,8 +10,8 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
-import psy.sigmal.parsing.Token;
-import psy.sigmal.parsing.Tokenizer;
+import psy.simal.parsing.Token;
+import psy.simal.parsing.Tokenizer;
 
 public class TokenizerDebugPane extends TextArea{
 	

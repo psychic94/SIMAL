@@ -1,4 +1,4 @@
-package psy.sigmal.parsing;
+package psy.simal.parsing;
 
 import java.io.File;
 import java.util.ArrayDeque;
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Stack;
 
-import psy.sigmal.Dictionary;
-import psy.sigmal.parsing.Token.TokenType;
+import psy.simal.Dictionary;
+import psy.simal.parsing.Token.TokenType;
 
 public class Tokenizer{
 	private static Stack<Block> hierarchy;

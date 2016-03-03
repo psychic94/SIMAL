@@ -1,4 +1,4 @@
-package psy.sigmal.parsing;
+package psy.simal.parsing;
 
 public abstract class Statement extends CodePart{
 	protected final int index;

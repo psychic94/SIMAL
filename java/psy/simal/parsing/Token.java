@@ -1,4 +1,4 @@
-package psy.sigmal.parsing;
+package psy.simal.parsing;
 
 public class Token{
 	public enum TokenType{

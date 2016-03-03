@@ -1,4 +1,4 @@
-package psy.sigmal.parsing;
+package psy.simal.parsing;
 
 import java.util.ArrayList;
 
