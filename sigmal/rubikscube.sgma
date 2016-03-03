@@ -1,0 +1,54 @@
+include sigmal.lib.color
+include sigmal.lib.model
+include sigmal.util.set
+
+Model Rubiks:
+	U is a Cube:
+		top's color is white
+	add U to topLayer
+	UF is a Cube:
+		top's color is white
+		front's color is red
+	add UF to topLayer and UF to frontLayer
+	#continue coloring and adding pieces in this manner
+
+#turn the top(U) layer clockwise
+Animation Ucw:
+	rotate topLayer cw around yAxis by 90 deg * frameDelay for 1 sec
+	for each cubie in topLayer:
+		if frontLayer contains cubie:
+			#cubie is in the ufr corner moving to ufl
+			if rightLayer contains cubie:
+				remove cubie from  rightLayer
+				add cubie to leftLayer
+			#cubie is in the ufl corner moving to ubl
+			else if leftLayer contains cubie:
+				remove cubie from frontLayer
+				add cubie to backLayer
+			#cubie is in the uf edge moving to ul
+			else:
+				remove cubie from frontLayer
+				add cubie to leftLayer
+		else if rightLayer contains cubie:
+			#cubie is in the ubr corner moving to ufr
+			if backLayer contains cubie:
+				remove cubie from backLayer
+				add cubie to frontLayer
+			#cubie is in the ur edge moving to uf
+			else:
+				remove cubie from rightLayer
+				add cubie to frontLayer
+		else if leftLayer contains cubie:
+			#cubie is in the ubl corner moving to ubr
+			if backLayer contains cubie:
+				remove cubie from leftLayer
+				add cubie to rightLayer
+			#cubie is in the ul edge moving to ub
+			else:
+				remove cubie from leftLayer
+				add cubie to backLayer
+		#cubie is in the ub edge moving to ur
+		else if backLayer contains cubie:
+			remove cubie from backLayer
+			add cubie to rightLayer
+		#an else here would be the top center cubie, which doesn't move

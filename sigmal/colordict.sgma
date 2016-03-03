@@ -1,0 +1,23 @@
+**greyscale
+white is 0xffffff
+lightgrey is 0xc0c0c0
+grey is 0x808080
+darkgrey is 0x404040
+black is 0x000000
+**primary
+red is 0xff0000
+green is 0x00ff00
+blue is 0x0000ff
+**secondary
+yellow is 0xffff00
+magenta is 0xff00ff
+cyan is 0x00ffff
+**tertiary
+orange is 0xff8800
+chartreuse is 0x88ff00
+springgreen is 0x00ff88
+azure is 0x0088ff
+violet is 0x8800ff
+rose is 0xff0088
+**other common
+brown is 0x964b00

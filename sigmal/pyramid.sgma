@@ -1,0 +1,12 @@
+Pyramid Model:
+	Point A is (0,0,0)
+	Point B is (1,0,0)
+	Point C is (0,0,1)
+	Point D is (1,0,1)
+	Point E is (0.5,1,0.5)
+	Face back's bounds are A,E,B
+	Face left's bounds are A,C,E
+	Face right's bounds are B,E,D
+	Face front's bounds are C,D,E
+	Face base's bounds are A,B,D,C
+ 

@@ -1,0 +1,46 @@
+Pyramid Model:
+	n is undefined
+	Face Set base' vertices are undefined
+	Point apex is undefined
+	Face Set is empty
+	for each number from 2 until n
+		Face latteral apex,current,previous
+		add
+...
+
+Hexahedron Model:
+	Point A is undefined;	Point B is undefined
+	Point C is undefined;	Point D is undefined
+	Point E is undefined;	Point F is undefined
+	Point G is undefined;	Point H is undefined
+	Face Set top's bounds is A,B,C,D
+	Face Set bottom is boundedby E,F,G,H
+	Face Set front is boundedby A,D,H,E
+	Face Set right is boundedby A,B,F,E
+	Face Set left is boundedby D,C,G,H
+	Face Set back is boundedby B,C,G,F
+...
+
+Cuboid Model:
+	Typeof Hexahedron
+	height  is undefined
+	width   is undefined
+	depth   is undefined
+	Point A is (height/2, width/2, depth/2)
+	Point B is (height/2, width/2, -depth/2)
+	Point C is (height/2, -width/2, -depth/2)
+	Point D is (height/2, -width/2, depth/2)
+	Point E is (-height/2, width/2, depth/2)
+	Point F is (-height/2, width/2, -depth/2)
+	Point G is (-height/2, -width/2, -depth/2)
+	Point H is (-height/2, -width/2, depth/2)
+...
+
+Cube Model:
+	Typeof Cuboid
+	length is undefined
+	height is length
+	width is length
+	depth is length
+...
+

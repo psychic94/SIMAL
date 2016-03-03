@@ -1,0 +1,113 @@
+import objdict
+import colordict
+
+RubiksCube World:
+	**Centers
+	U is a Cube with length of 1 at (0,1,0)
+	U's top's color is white
+	
+	D is a Cube with length of 1 at (0,-1,0)
+	D's bottom's color is yellow
+	
+	R is a Cube with length of 1 at (1,0,0)
+	R's right's color is red
+	
+	L is a Cube with length of 1 at (-1,0,0)
+	L's left's color is orange
+	
+	F is a Cube with length of 1 at (0,0,1)
+	F's front's color is green
+	
+	B is a Cube with length of 1 at (0,0,-1)
+	B's back's color is blue
+	
+	**Edges
+	UF is a Cube with length of 1 at (0,1,1)
+	UF's top's color is white
+	UF's front's color is green
+	
+	UR is a Cube with length of 1 at (1,1,0)
+	UR's top's color is white
+	UR's right's color is red
+	
+	UL is a Cube with length of 1 at (-1,1,0)
+	UL's top's color is white
+	UL's left's color is orange
+	
+	UB is a Cube with length of 1 at (0,1,-1)
+	UB's top's color is white
+	UB's back's color is blue
+	
+	FR is a Cube with length of 1 at (1,0,1)
+	FR's front's color is green
+	FR's right's color is red
+	
+	FL is a Cube with length of 1 at (-1,0,1)
+	FL's front's color is green
+	FL's left's color is orange
+	
+	FD is a Cube with length of 1 at (0,-1,1)
+	FD's front's color is green
+	FD's bottom's color is yellow
+	
+	RD is a Cube with length of 1 at (1,-1,0)
+	RD's right's color is red
+	RD's bottom's color is yellow
+	
+	RB is a Cube with length of 1 at (1,0,-1)
+	RB's right's color is red
+	RB's back's color is blue
+	
+	LD is a Cube with length of 1 at (-1,-1,0)
+	LD's left's color is orange
+	LD's bottom's color is yellow
+	
+	LB is a Cube with length of 1 at (-1,0,-1)
+	LB's left's color is orange
+	LB's back's color is blue
+	
+	DB is a Cube with length of 1 at (0,1,1)
+	DB's bottom's color is yellow
+	DB's back's color is blue
+	
+	**Corners
+	UFR is a Cube with length of 1 at (1,1,1)
+	UFR's top's color is white
+	UFR's front's color is green
+	UFR's right's color is red
+	
+	UFL is a Cube with length of 1 at (-1,1,1)
+	UFL's top's color is white
+	UFL's front's color is green
+	UFL's left's color is orange
+	
+	URB is a Cube with length of 1 at (1,1,-1)
+	URB's top's color is white
+	URB's right's color is red
+	URB's back's color is blue
+	
+	ULB is a Cube with length of 1 at (-1,1,-1)
+	ULB's top's color is white
+	ULB's left's color is orange
+	ULB's back's color is blue
+	
+	FRD is a Cube with length of 1 at (1,-1,1)
+	FRD's front's color is green
+	FRD's right's color is red
+	FRD's bottom's color is yellow
+	
+	FLD is a Cube with length of 1 at (-1,-1,1)
+	FLD's front's color is green
+	FLD's left's color is orange
+	FLD's bottom's color is yellow
+	
+	RDB is a Cube with length of 1 at (1,-1,-1)
+	RDB's right's color is red
+	RDB's bottom's color is yellow
+	RDB's back's color is blue
+	
+	LDB is a Cube with length of 1 at (-1,-1,-1)
+	LDB's left's color is orange
+	LDB's bottom's color is yellow
+	LDB's back's color is blue
+...
