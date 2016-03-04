@@ -1,5 +1,10 @@
 package psy.simal.parsing;
 
+import java.util.ArrayDeque;
+
+import psy.simal.error.ParseException;
+
+
 public class Expression{
 	private final Expression left, right;
 	private final String operator;
@@ -32,21 +37,25 @@ public class Expression{
 		}
 	}
 	
-	private class TerminalValue extends Expression{
-		private final String value;
-		
-		public TerminalValue(String value){
-			super(null, "", null);
-			this.value = value;
+	public String toString(){
+		return "(" + left + operator + right + ")";
+	}
+	
+	public static void main(String[] args){
+		String line = "";
+		for(String arg : args){
+			line += arg + " ";
 		}
+		line.trim();
 		
-		@Override
-		public double evalAsNumber(){
-			try{
-				return Double.parseDouble(value);
-			}catch(NumberFormatException e){
-				return 0;
-			}
-		}
+		ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, 1);
+		
+		try{
+			Parser parser = new Parser(tokens);
+			Expression expr = parser.parseExpression();
+			System.out.println(expr + " = " + expr.evalAsNumber());
+		}catch(ParseException e){
+			System.out.println(e.getMessage());
+		}	
 	}
 }

@@ -218,8 +218,9 @@ public class Tokenizer{
 				System.out.println("Unknown symbol: " + character);
 				break;
 			}
-		}	
+		}
 		
+		//tokens.addLast(new Token(TokenType.LINE_END, "", line.length()));
 		return tokens;
 	}
 	
