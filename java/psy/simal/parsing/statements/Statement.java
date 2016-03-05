@@ -1,4 +1,6 @@
-package psy.simal.parsing;
+package psy.simal.parsing.statements;
+
+import psy.simal.parsing.CodePart;
 
 public abstract class Statement extends CodePart{
 	protected final int index;

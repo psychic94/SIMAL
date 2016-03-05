@@ -1,4 +1,7 @@
-package psy.simal.parsing;
+package psy.simal.parsing.statements;
+
+import psy.simal.parsing.Block;
+import psy.simal.parsing.CodePart;
 
 public class ForLoop extends Block{
 	private final int index;
