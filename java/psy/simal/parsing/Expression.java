@@ -5,7 +5,7 @@ import java.util.ArrayDeque;
 import psy.simal.error.ParseException;
 
 
-public class Expression{
+public class Expression implements Value{
 	private final Expression left, right;
 	private final String operator;
 	
@@ -35,6 +35,15 @@ public class Expression{
 			default:
 				return 0;
 		}
+	}
+	
+	public String evalAsString(){
+		//TODO
+		return "";
+	}
+	
+	public boolean evalAsBoolean(){
+		return evalAsNumber() > 0;
 	}
 	
 	public String toString(){
