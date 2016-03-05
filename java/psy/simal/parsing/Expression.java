@@ -48,9 +48,8 @@ public class Expression{
 		}
 		line.trim();
 		
-		ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, 1);
-		
 		try{
+			ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, 1);
 			Parser parser = new Parser(tokens);
 			Expression expr = parser.parseExpression();
 			System.out.println(expr + " = " + expr.evalAsNumber());

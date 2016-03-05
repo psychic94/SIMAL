@@ -2,12 +2,12 @@ package psy.simal.parsing;
 
 import java.io.File;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Queue;
 import java.util.Stack;
 
 import psy.simal.Dictionary;
+import psy.simal.error.EndOfLineException;
 import psy.simal.parsing.Token.TokenType;
+import psy.simal.parsing.statements.Statement;
 
 public class Tokenizer{
 	private static Stack<Block> hierarchy;
@@ -63,7 +63,7 @@ public class Tokenizer{
 				}
 	}
 
-	public static ArrayDeque<Token> tokenizeLine(String line, int index){
+	public static ArrayDeque<Token> tokenizeLine(String line, int index) throws EndOfLineException{
 		int pointer = 0;
 		
 		ArrayDeque<Token> tokens = new ArrayDeque<Token>();
@@ -73,53 +73,44 @@ public class Tokenizer{
 			char character = line.charAt(pointer);
 			if(character == '('){
 				tokens.addLast(new Token(TokenType.OPEN_PAREN, "(", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == ')'){
 				tokens.addLast(new Token(TokenType.CLOSE_PAREN, ")", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '+'){
 				tokens.addLast(new Token(TokenType.ADD_SUB, "+", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '-'){
 				tokens.addLast(new Token(TokenType.ADD_SUB, "-", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '*'){
 				tokens.addLast(new Token(TokenType.MUL_DIV_MOD, "*", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '/'){
 				tokens.addLast(new Token(TokenType.MUL_DIV_MOD, "/", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '%'){
 				tokens.addLast(new Token(TokenType.MUL_DIV_MOD, "%", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '^'){
 				tokens.addLast(new Token(TokenType.POWER, "^", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '!'){
 				pointer++;
 				if(pointer >= line.length()){
-					//Error: Unexpected end of line
+					throw new EndOfLineException(index);
 				}else if(line.charAt(pointer) != '='){
 					//Error: Expected '='
 				}else{
 					tokens.addLast(new Token(TokenType.COND_OP, "!=", tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 					pointer++;
 					tokenStart = pointer;
 				}
@@ -127,29 +118,24 @@ public class Tokenizer{
 				pointer++;
 				if(pointer < line.length() && line.charAt(pointer) == '='){
 					tokens.addLast(new Token(TokenType.COND_OP, ">=", tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 					pointer++;
 					tokenStart = pointer;
 				}else{
 					tokens.addLast(new Token(TokenType.COND_OP, ">", tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 					tokenStart = pointer;
 				}
 			}else if(character == '<'){
 				pointer++;
 				if(pointer < line.length() && line.charAt(pointer) == '='){
 					tokens.addLast(new Token(TokenType.COND_OP, "<=", tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 					pointer++;
 					tokenStart = pointer;
 				}else{
 					tokens.addLast(new Token(TokenType.COND_OP, "<", tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 					tokenStart = pointer;
 				}
 			}else if(character == '='){
 				tokens.addLast(new Token(TokenType.COND_OP, "=", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(Character.isDigit(character)){
@@ -166,7 +152,6 @@ public class Tokenizer{
 						}
 					}else{
 						tokens.addLast(new Token(TokenType.NUMBER, line.substring(tokenStart, pointer), tokenStart));
-						//System.out.println(tokens.get(tokens.size()-1));
 						tokenStart = pointer;
 						break;
 					}
@@ -174,8 +159,9 @@ public class Tokenizer{
 				}
 			}else if(Character.isWhitespace(character)){
 				pointer++;
-				tokenStart = (pointer);
+				tokenStart = pointer;
 			}else if(Character.isLetter(character)){
+				//Keep advancing the pointer as long as the next character is alphanumeric
 				do{
 					pointer++;
 					try{
@@ -184,34 +170,28 @@ public class Tokenizer{
 						break;
 					}
 				}while(Character.isLetterOrDigit(character) || character == '_');
-				String str = line.substring(tokenStart, pointer);
+				//Separate out the word
+				String str = line.substring(tokenStart, pointer).trim();
 				
-				Dictionary dict = Dictionary.getInstance();
-				if(dict.isKeyword(str)){
+				//Try to identify the type of word
+				if(Dictionary.isKeyword(str)){
 					tokens.addLast(new Token(TokenType.KEYWORD, str, tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
-				}else if(dict.isAction(str)){
+				}else if(Dictionary.isAction(str)){
 					tokens.addLast(new Token(TokenType.ACTION, str, tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
-				}else if(dict.isIdentifier(str)){
+				}else if(Dictionary.isIdentifier(str)){
 					tokens.addLast(new Token(TokenType.IDENT, str, tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 				}else{
 					tokens.addLast(new Token(TokenType.WORD, str, tokenStart));
-					//System.out.println(tokens.get(tokens.size()-1));
 				}
 				tokenStart = (pointer);
 				// TODO add new identifier in right context
 				// TODO ask if str is a modifier for appropriate action
-				// TODO colon
 			}else if(character == ':'){
 				tokens.addLast(new Token(TokenType.SYMBOL, ":", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == ','){
 				tokens.addLast(new Token(TokenType.SYMBOL, ",", tokenStart));
-				//System.out.println(tokens.get(tokens.size()-1));
 				pointer++;
 				tokenStart = pointer;
 			}else{
@@ -230,11 +210,15 @@ public class Tokenizer{
 			line += arg + " ";
 		}
 		line.trim();
-		ArrayDeque<Token> tokens = tokenizeLine(line, 1);
+		try{
+			ArrayDeque<Token> tokens = tokenizeLine(line, 1);
 
-		System.out.println(tokens.size() + " tokens");
-//		for(Token token : tokens){
-//			System.out.println(token);
-//		}
+			System.out.println(tokens.size() + " tokens");
+			for(Token token : tokens){
+				System.out.println(token);
+			}
+		}catch(EndOfLineException e){
+			System.out.println(e.getMessage());
+		}
 	}
 }

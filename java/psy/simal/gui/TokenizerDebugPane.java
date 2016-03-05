@@ -5,6 +5,7 @@ import java.util.ArrayDeque;
 
 import javax.swing.SwingUtilities;
 
+import psy.simal.error.EndOfLineException;
 import psy.simal.parsing.Token;
 import psy.simal.parsing.Tokenizer;
 
@@ -33,10 +34,14 @@ public class TokenizerDebugPane extends TextArea{
 				SwingUtilities.invokeLater(this);
 				return;
 			}
-			ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, lineNum);
-			setText(tokens.size() + " tokens:");
-			for(Token token : tokens){
-				append("\n" + token);
+			try{
+				ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, lineNum);
+				setText(tokens.size() + " tokens:");
+				for(Token token : tokens){
+					append("\n" + token);
+				}
+			}catch(EndOfLineException e){
+				System.out.println(e.getMessage());
 			}
 
 			SwingUtilities.invokeLater(this);
