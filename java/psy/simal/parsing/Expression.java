@@ -2,14 +2,15 @@ package psy.simal.parsing;
 
 import java.util.ArrayDeque;
 
+import psy.simal.Value;
 import psy.simal.error.ParseException;
 
 
 public class Expression implements Value{
-	private final Expression left, right;
+	private final Value left, right;
 	private final String operator;
 	
-	public Expression(Expression left, String operator, Expression right){
+	public Expression(Value left, String operator, Value right){
 		this.left = left;
 		this.right = right;
 		this.operator = operator;

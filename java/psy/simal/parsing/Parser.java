@@ -3,6 +3,7 @@ package psy.simal.parsing;
 import java.util.ArrayDeque;
 
 import psy.simal.Dictionary;
+import psy.simal.Value;
 import psy.simal.error.EndOfLineException;
 import psy.simal.error.MissingValueException;
 import psy.simal.error.ParseException;
@@ -36,11 +37,11 @@ public class Parser{
 	
 	//Context free grammar:
 	//expression = product {("+"|"-") product}
-	public Expression parseExpression() throws ParseException{
-		Expression left = parseProduct();
+	public Value parseExpression() throws ParseException{
+		Value left = parseProduct();
 		while(accept(TokenType.ADD_SUB, false)){
 			String operator = tokens.removeFirst().getValue();
-			Expression right = parseProduct();
+			Value right = parseProduct();
 			if(left == null && operator.equals("-")){
 				//Negative number
 				left = new Expression(new TerminalValue("0"), operator, right);
@@ -53,11 +54,11 @@ public class Parser{
 	
 	//Context free grammar:
 	//product = power {("*"|"/"|"%") power}
-	private Expression parseProduct() throws ParseException{
-		Expression left = parsePower();
+	private Value parseProduct() throws ParseException{
+		Value left = parsePower();
 		while(accept(TokenType.MUL_DIV_MOD, false)){
 			String operator = tokens.removeFirst().getValue();
-			Expression right = parsePower();
+			Value right = parsePower();
 			left = new Expression(left, operator, right);
 		}
 		return left;
@@ -65,10 +66,10 @@ public class Parser{
 	
 	//Context free grammar:
 	//power = term ["^" term]
-	private Expression parsePower() throws ParseException{
-		Expression left = parseTerm();
+	private Value parsePower() throws ParseException{
+		Value left = parseTerm();
 		if(accept("^", true)){
-			Expression right = parseTerm();
+			Value right = parseTerm();
 			return new Expression(left, "^", right);
 		}
 		return left;
@@ -76,7 +77,7 @@ public class Parser{
 	
 	//Context free grammar:
 	//term = (ident | number | "(" expression ")")
-	private Expression parseTerm() throws ParseException{
+	private Value parseTerm() throws ParseException{
 		if(accept(TokenType.WORD, false)){
 			String word = tokens.peekFirst().getValue();
 			if(Dictionary.isIdentifier(word)){

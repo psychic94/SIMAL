@@ -1,4 +1,4 @@
-package psy.simal.parsing;
+package psy.simal;
 
 public interface Value{
 	public double evalAsNumber();
