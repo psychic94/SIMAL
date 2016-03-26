@@ -94,7 +94,7 @@ public class Parser{
 			String number = tokens.removeFirst().getValue();
 			return new TerminalValue(number);
 		}else if(accept("(", true)){
-			Expression expr = parseExpression();
+			Value expr = parseExpression();
 			expect(")", true);
 			return expr;
 		}else if(tokens.peekFirst() == null){

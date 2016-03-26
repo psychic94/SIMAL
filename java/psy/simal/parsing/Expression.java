@@ -61,7 +61,7 @@ public class Expression implements Value{
 		try{
 			ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, 1);
 			Parser parser = new Parser(tokens);
-			Expression expr = parser.parseExpression();
+			Value expr = parser.parseExpression();
 			System.out.println(expr + " = " + expr.evalAsNumber());
 		}catch(ParseException e){
 			System.out.println(e.getMessage());
