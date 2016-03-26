@@ -62,9 +62,9 @@ public class ForLoop extends Block{
 		}
 		
 		public String getCompOper(){
-			if(inclusive && start < end)
+			if(inclusive && start <= end)
 				return "<=";
-			else if(inclusive && start > end)
+			else if(inclusive && start >= end)
 				return ">=";
 			else if(!inclusive && start < end)
 				return "<";
@@ -73,14 +73,14 @@ public class ForLoop extends Block{
 		}
 	}
 	
-	public void debug(){
+	public void debug(int indent){
 		String header = "for(double ";
 		header += varName + "=" + range.getStart() + "; ";
 		header += varName + range.getCompOper() + range.getEnd() + "; ";
 		header += varName + "+=" + interval + "){";
 		System.out.println(header);
 		for(CodePart part : code){
-			part.debug();
+			part.debug(indent+2);
 		}
 		System.out.println("}");
 	}
