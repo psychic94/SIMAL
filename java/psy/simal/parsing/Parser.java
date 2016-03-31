@@ -1,6 +1,7 @@
 package psy.simal.parsing;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 import psy.simal.Dictionary;
 import psy.simal.Value;
@@ -8,6 +9,7 @@ import psy.simal.error.EndOfLineException;
 import psy.simal.error.MissingValueException;
 import psy.simal.error.ParseException;
 import psy.simal.parsing.Token.TokenType;
+import psy.simal.parsing.statements.Declaration;
 
 //In context free grammar notations:
 //() means pick exactly one
@@ -27,12 +29,34 @@ public class Parser{
 		this.lineNum = lineNum;
 	}
 	
-	public static CodePart parseLine(ArrayDeque<Token> tokens){
-		return (new Parser(tokens).parseLine());
+	public static CodePart parseLine(String line) throws ParseException{
+		return parseLine(line, 1);
 	}
 	
-	public CodePart parseLine(){
-		return null;
+	public static CodePart parseLine(ArrayDeque<Token> tokens) throws ParseException{
+		return parseLine(tokens, 1);
+	}
+	
+	public static CodePart parseLine(String line, int lineNum) throws ParseException{
+		return parseLine(Tokenizer.tokenizeLine(line, lineNum), lineNum);
+	}
+	
+	public static CodePart parseLine(ArrayDeque<Token> tokens, int lineNum) throws ParseException{
+		Parser instance = new Parser(tokens, lineNum);
+		//this line temporarily removes the first token so the second can be read
+		Token first = tokens.removeFirst();
+		Token second = tokens.peekFirst();
+		//add the first token back to the front of the dequeue
+		//included just in case the copy of tokens encapsulated in instance is also changed
+		tokens.addFirst(first);
+		if(second.getValue().equals("is") || second.getValue().equals("are"))
+			return Declaration.parse(instance);
+		else
+			throw new ParseException("Unknown statement type at line " + lineNum);
+	}
+	
+	public ArrayDeque<Token> getTokens(){
+		return tokens;
 	}
 	
 	//Context free grammar:
@@ -102,6 +126,23 @@ public class Parser{
 		}
 			
 		return null;
+	}
+	
+	//Context-free grammar
+	//array = "[" [expression {"," expression}] "]"
+	public ArrayList<Value> parseArray() throws ParseException{
+		expect("[", true);
+		ArrayList<Value> values = new ArrayList<Value>();
+		if(accept("]", true))
+			return values;
+		while(true){
+			values.add(parseExpression());
+			if(!accept(",", true)){
+				break;
+			}
+		}
+		expect("]", true);
+		return values;
 	}
 	
 	/**
