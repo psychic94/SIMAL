@@ -55,6 +55,10 @@ public class Parser{
 			throw new ParseException("Unknown statement type at line " + lineNum);
 	}
 	
+	public int getLineNum(){
+		return lineNum;
+	}
+	
 	public ArrayDeque<Token> getTokens(){
 		return tokens;
 	}
@@ -104,7 +108,7 @@ public class Parser{
 	private Value parseTerm() throws ParseException{
 		if(accept(TokenType.WORD, false)){
 			String word = tokens.peekFirst().getValue();
-			if(Dictionary.isIdentifier(word)){
+			if(Dictionary.isPrimitive(word)){
 				tokens.removeFirst();
 				return Dictionary.getValue(word);
 			}
