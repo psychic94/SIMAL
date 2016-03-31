@@ -12,7 +12,7 @@ import psy.simal.parsing.Token.TokenType;
 //In context free grammar notations:
 //() means pick exactly one
 //[] means put contents zero or one time(s)
-//{} means put contents and number of times
+//{} means put contents any number of times
 public class Parser{
 	private ArrayDeque<Token> tokens;
 	//Used to indicate line number in errors
@@ -104,6 +104,12 @@ public class Parser{
 		return null;
 	}
 	
+	/**
+	 * Tests the next token against a non-required target value
+	 * @param target the target token value
+	 * @param shouldAdvance will remove the first token if and only if true AND a match is found
+	 * @return whether a match was found
+	 */
 	public boolean accept(String target, boolean shouldAdvance){
 		Token token = tokens.peekFirst();
 		if(token == null){
@@ -118,6 +124,12 @@ public class Parser{
 			return false;
 	}
 	
+	/**
+	 * Tests the next token against a non-required target type
+	 * @param target the target token type
+	 * @param shouldAdvance will remove the first token if and only if true AND a match is found
+	 * @return whether a match was found
+	 */
 	public boolean accept(TokenType targetType, boolean shouldAdvance){
 		Token actual = tokens.peekFirst();
 		if(actual == null){
@@ -132,6 +144,12 @@ public class Parser{
 			return false;
 	}
 	
+	/**
+	 * Tests the next token against a required target value
+	 * @param target the target token value
+	 * @param shouldAdvance will remove the first token if and only if true AND a match is found
+	 * @return whether a match was found
+	 */	
 	public boolean expect(String target, boolean shouldAdvance){
 		boolean success = accept(target, shouldAdvance);
 		if(!success){
@@ -140,6 +158,12 @@ public class Parser{
 		return success;
 	}
 	
+	/**
+	 * Tests the next token against a required target type
+	 * @param target the target token type
+	 * @param shouldAdvance will remove the first token if and only if true AND a match is found
+	 * @return whether a match was found
+	 */
 	public boolean expect(TokenType targetType, boolean shouldAdvance){
 		boolean success = accept(targetType, shouldAdvance);
 		if(!success){
