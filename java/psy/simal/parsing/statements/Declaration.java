@@ -56,9 +56,20 @@ public class Declaration extends Statement{
 	}
 
 	@Override
-	public void debug(int indent) {
-		// TODO Auto-generated method stub
-
+	public ArrayList<String> debug(int indent){
+		ArrayList<String> lines = new ArrayList<String>();
+		if(scalar){
+			lines.add("type: primitive declaration");
+			lines.add("    identifier: " + identifier);
+			lines.add("    value: " + scalarValue);
+		}else{
+			lines.add("type: array declaration");
+			lines.add("    identifier: " + identifier);
+			for(int i=0; i<arrayValues.size(); i++){
+				lines.add("    value " + i + ": " + arrayValues.get(i));
+			}
+		}
+		return lines;
 	}
 
 }

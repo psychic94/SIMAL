@@ -23,8 +23,8 @@ public class Instantiation<V extends SimalObject> extends Statement{
 	}
 
 	@Override
-	public void debug(int indent) {
+	public ArrayList<String> debug(int indent) {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 }

@@ -1,5 +1,7 @@
 package psy.simal.parsing.statements;
 
+import java.util.ArrayList;
+
 import psy.simal.parsing.Block;
 import psy.simal.parsing.CodePart;
 
@@ -73,15 +75,20 @@ public class ForLoop extends Block{
 		}
 	}
 	
-	public void debug(int indent){
-		String header = "for(double ";
+	public ArrayList<String> debug(int indent){
+		String header = "";
+		ArrayList<String> lines = new ArrayList<String>();
+		for(int i=0; i<indent; i++)
+			header += " ";
+		header += "for(double ";
 		header += varName + "=" + range.getStart() + "; ";
 		header += varName + range.getCompOper() + range.getEnd() + "; ";
 		header += varName + "+=" + interval + "){";
-		System.out.println(header);
+		lines.add(header);
 		for(CodePart part : code){
-			part.debug(indent+2);
+			lines.addAll(part.debug(indent+2));
 		}
-		System.out.println("}");
+		lines.add("}");
+		return lines;
 	}
 }
