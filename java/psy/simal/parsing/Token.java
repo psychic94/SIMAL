@@ -3,7 +3,7 @@ package psy.simal.parsing;
 public class Token{
 	public enum TokenType{
 		IDENT, KEYWORD, ACTION, MODIFIER,
-		OPEN_PAREN, CLOSE_PAREN,
+		OPEN_DELIM, CLOSE_DELIM,
 		ADD_SUB, MUL_DIV_MOD, POWER, TRIG,
 		COND_OP, CONJUNCTION,
 		SYMBOL, NUMBER, STRING, WORD,

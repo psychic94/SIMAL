@@ -42,6 +42,8 @@ public class Parser{
 	}
 	
 	public static CodePart parseLine(ArrayDeque<Token> tokens, int lineNum) throws ParseException{
+		if(tokens.size()<1)
+			return null;
 		Parser instance = new Parser(tokens, lineNum);
 		//this line temporarily removes the first token so the second can be read
 		Token first = tokens.removeFirst();
@@ -49,7 +51,7 @@ public class Parser{
 		//add the first token back to the front of the dequeue
 		//included just in case the copy of tokens encapsulated in instance is also changed
 		tokens.addFirst(first);
-		if(second.getValue().equals("is") || second.getValue().equals("are"))
+		if(second!=null && (second.getValue().equals("is") || second.getValue().equals("are")))
 			return Declaration.parse(instance);
 		else
 			throw new ParseException("Unknown statement type at line " + lineNum);

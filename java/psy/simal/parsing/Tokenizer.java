@@ -72,11 +72,19 @@ public class Tokenizer{
 		while(pointer < line.length()){
 			char character = line.charAt(pointer);
 			if(character == '('){
-				tokens.addLast(new Token(TokenType.OPEN_PAREN, "(", tokenStart));
+				tokens.addLast(new Token(TokenType.OPEN_DELIM, "(", tokenStart));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == ')'){
-				tokens.addLast(new Token(TokenType.CLOSE_PAREN, ")", tokenStart));
+				tokens.addLast(new Token(TokenType.CLOSE_DELIM, ")", tokenStart));
+				pointer++;
+				tokenStart = pointer;
+			}else if(character == '['){
+				tokens.addLast(new Token(TokenType.OPEN_DELIM, "[", tokenStart));
+				pointer++;
+				tokenStart = pointer;
+			}else if(character == ']'){
+				tokens.addLast(new Token(TokenType.CLOSE_DELIM, "]", tokenStart));
 				pointer++;
 				tokenStart = pointer;
 			}else if(character == '+'){
@@ -178,8 +186,8 @@ public class Tokenizer{
 					tokens.addLast(new Token(TokenType.KEYWORD, str, tokenStart));
 				}else if(Dictionary.isAction(str)){
 					tokens.addLast(new Token(TokenType.ACTION, str, tokenStart));
-				}else if(Dictionary.isIdentifier(str)){
-					tokens.addLast(new Token(TokenType.IDENT, str, tokenStart));
+				//}else if(Dictionary.isIdentifier(str)){
+				//	tokens.addLast(new Token(TokenType.IDENT, str, tokenStart));
 				}else{
 					tokens.addLast(new Token(TokenType.WORD, str, tokenStart));
 				}
