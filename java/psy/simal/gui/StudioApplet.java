@@ -1,7 +1,5 @@
 package psy.simal.gui;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,22 +11,26 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSplitPane;
 
 public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 	private static StudioApplet instance = null;
+	JSplitPane inOutPane;
 	TextArea input;
 	TextArea output;
 	JMenuBar menuBar;
-	JMenu fileMenu;	
+	JMenu fileMenu, debugMenu;	
 	JMenuItem openFile;
+	JRadioButtonMenuItem tokenizeMode, parseMode;
 	JFileChooser fc;
+	ButtonGroup debugModeGroup;
 	File activeFile;
 	
 	public static void main(String[] args){
@@ -42,20 +44,7 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 	
 	public void init(){
 		addKeyListener(this);
-		
-		//Start panel setup
-		JSplitPane inOutPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		
-		input = new TextArea();
-		input.addKeyListener(this);
-		inOutPane.setBottomComponent(input);
-		
-		output = new TokenizerDebugPane();
-		inOutPane.setTopComponent(output);
-		inOutPane.setResizeWeight(0.5);
-		inOutPane.setOneTouchExpandable(true);
-		//End panel setup
-		
+
 		//Start menu bar setup
 		menuBar = new JMenuBar();
 		
@@ -66,7 +55,37 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		openFile = new JMenuItem("Open", KeyEvent.VK_O);
 		openFile.addActionListener(this);
 		fileMenu.add(openFile);
+		
+		//Debug Menu
+		debugModeGroup = new ButtonGroup();
+		debugMenu = new JMenu("Debug");
+		debugMenu.setMnemonic(KeyEvent.VK_D);
+		menuBar.add(debugMenu);
+		tokenizeMode = new JRadioButtonMenuItem("Tokenizer");
+		tokenizeMode.setMnemonic(KeyEvent.VK_T);
+		tokenizeMode.setSelected(true);
+		tokenizeMode.addActionListener(this);
+		debugModeGroup.add(tokenizeMode);
+		debugMenu.add(tokenizeMode);
+		parseMode = new JRadioButtonMenuItem("Parser");
+		parseMode.setMnemonic(KeyEvent.VK_P);
+		parseMode.addActionListener(this);
+		debugModeGroup.add(parseMode);
+		debugMenu.add(parseMode);
 		//End menu bar setup
+		
+		//Start panel setup
+		inOutPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		
+		input = new TextArea();
+		input.addKeyListener(this);
+		inOutPane.setBottomComponent(input);
+		
+		output = new TokenizerDebugPane();
+		inOutPane.setTopComponent(output);
+		inOutPane.setResizeWeight(0.5);
+		inOutPane.setOneTouchExpandable(true);
+		//End panel setup
 
 		setJMenuBar(menuBar);
 		setContentPane(inOutPane);
@@ -91,12 +110,21 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 					while((line = br.readLine()) != null){
 						input.append(line + "\n");
 					}
+					br.close();
 				}catch(FileNotFoundException fnfe){
 					
 				}catch(IOException ioe){
 					
 				}
 			}
+		}else if(e.getSource().equals(tokenizeMode) && !(output instanceof TokenizerDebugPane)){
+			output = new TokenizerDebugPane();
+			inOutPane.setTopComponent(output);
+			//setContentPane(inOutPane);
+		}else if(e.getSource().equals(parseMode) && !(output instanceof ParserDebugPane)){
+			output = new ParserDebugPane();
+			inOutPane.setTopComponent(output);
+			//setContentPane(inOutPane);
 		}
 	}
 	
@@ -116,17 +144,21 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent event){
 		int key = event.getKeyCode();
-		if(key == KeyEvent.VK_UP){
-			String line = getInputLine(getCaretLine()-1);
-			input.setCaretPosition(input.getCaretPosition()-line.length()-1);
-		}else if(key == KeyEvent.VK_DOWN){
-			String line = getInputLine(getCaretLine()-1);
-			input.setCaretPosition(input.getCaretPosition()+line.length()+1);
-		}else if(key == KeyEvent.VK_LEFT){
-			input.setCaretPosition(input.getCaretPosition()-1);
-		}else if(key == KeyEvent.VK_RIGHT){
-			input.setCaretPosition(input.getCaretPosition()+1);
-		} 
+		try{
+			if(key == KeyEvent.VK_UP){
+				String line = getInputLine(getCaretLine()-1);
+				input.setCaretPosition(input.getCaretPosition()-line.length()-1);
+			}else if(key == KeyEvent.VK_DOWN){
+				String line = getInputLine(getCaretLine()-1);
+				input.setCaretPosition(input.getCaretPosition()+line.length()+1);
+			}else if(key == KeyEvent.VK_LEFT){
+				input.setCaretPosition(input.getCaretPosition()-1);
+			}else if(key == KeyEvent.VK_RIGHT){
+				input.setCaretPosition(input.getCaretPosition()+1);
+			}
+		}catch(IllegalArgumentException e){
+			
+		}
 	}
 
 	@Override
@@ -141,5 +173,12 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		
 	}
 	
-	
+	public static int getDebugMode(){
+		if(instance.tokenizeMode.isSelected())
+			return 0;
+		if(instance.parseMode.isSelected())
+			return 1;
+		else
+			return -1;
+	}
 }

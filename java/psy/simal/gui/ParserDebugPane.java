@@ -2,16 +2,20 @@ package psy.simal.gui;
 
 import java.awt.TextArea;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
 import psy.simal.error.EndOfLineException;
+import psy.simal.error.ParseException;
+import psy.simal.parsing.CodePart;
+import psy.simal.parsing.Parser;
 import psy.simal.parsing.Token;
 import psy.simal.parsing.Tokenizer;
 
-public class TokenizerDebugPane extends TextArea{
+public class ParserDebugPane extends TextArea{
 	
-	public TokenizerDebugPane(){
+	public ParserDebugPane(){
 		super();
 		setEditable(false);
 		SwingUtilities.invokeLater(new OutputUpdater());
@@ -21,7 +25,7 @@ public class TokenizerDebugPane extends TextArea{
 		private int lastLine;
 		
 		public void run(){
-			if(StudioApplet.getDebugMode()!=0){
+			if(StudioApplet.getDebugMode()!=1){
 				return;
 			}
 			int lineNum = StudioApplet.getCaretLine();
@@ -39,11 +43,17 @@ public class TokenizerDebugPane extends TextArea{
 			}
 			try{
 				ArrayDeque<Token> tokens = Tokenizer.tokenizeLine(line, lineNum);
-				setText(tokens.size() + " tokens:");
-				for(Token token : tokens){
-					append("\n" + token);
+				CodePart code = Parser.parseLine(tokens, lineNum);
+				setText("");
+				if(code!=null){
+					ArrayList<String> lines = code.debug(0);
+					for(String str : lines){
+						append(str + "\n");
+					}
 				}
 			}catch(EndOfLineException e){
+				System.out.println(e.getMessage());
+			}catch(ParseException e){
 				System.out.println(e.getMessage());
 			}
 
