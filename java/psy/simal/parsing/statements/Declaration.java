@@ -31,25 +31,6 @@ public class Declaration extends Statement{
 		this.arrayValues = values;
 		this.scalar = false;
 	}
-	
-	public static CodePart parse(Parser parser) throws ParseException{
-		parser.expect(TokenType.WORD, false);
-		String ident = parser.getTokens().removeFirst().getValue();
-		//don't need to check this token- it was checked before this method was called
-		parser.getTokens().removeFirst();
-		if(parser.accept("[", false)){
-			ArrayList<Value> values = parser.parseArray();
-			return new Declaration(parser.getLineNum(), ident, values);
-		}else if(parser.accept("a", true)){
-			if(parser.accept("Face", true)){
-				return Face.parse(ident, parser);
-			}
-			return null;
-		}else{
-			Value value = parser.parseExpression();
-			return new Declaration(parser.getLineNum(), ident, value);
-		}
-	}
 
 	@Override
 	public void run() {
@@ -79,5 +60,4 @@ public class Declaration extends Statement{
 		}
 		return lines;
 	}
-
 }

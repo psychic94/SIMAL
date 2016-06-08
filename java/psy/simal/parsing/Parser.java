@@ -2,6 +2,7 @@ package psy.simal.parsing;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import psy.simal.Dictionary;
 import psy.simal.Value;
@@ -9,13 +10,16 @@ import psy.simal.error.EndOfLineException;
 import psy.simal.error.MissingValueException;
 import psy.simal.error.ParseException;
 import psy.simal.parsing.Token.TokenType;
-import psy.simal.parsing.statements.Declaration;
+import psy.simal.parsing.statements.DeclarationParser;
+import psy.simal.parsing.statements.StatementParser;
 
 //In context free grammar notations:
 //() means pick exactly one
 //[] means put contents zero or one time(s)
 //{} means put contents any number of times
 public class Parser{
+	private static HashMap<String, StatementParser> commands = null;
+	private static HashMap<String, StatementParser> operations = null;
 	private ArrayDeque<Token> tokens;
 	//Used to indicate line number in errors
 	private int lineNum;
@@ -42,6 +46,7 @@ public class Parser{
 	}
 	
 	public static CodePart parseLine(ArrayDeque<Token> tokens, int lineNum) throws ParseException{
+		initCache();
 		if(tokens.size()<1)
 			return null;
 		Parser instance = new Parser(tokens, lineNum);
@@ -51,10 +56,42 @@ public class Parser{
 		//add the first token back to the front of the dequeue
 		//included just in case the copy of tokens encapsulated in instance is also changed
 		tokens.addFirst(first);
-		if(second!=null && (second.getValue().equals("is") || second.getValue().equals("are")))
-			return Declaration.parse(instance);
+		if(commands.containsKey(first.getValue()))
+			return commands.get(first.getValue()).parse(instance);
+		else if(operations.containsKey(second.getValue()))
+			return operations.get(second.getValue()).parse(instance);
 		else
 			throw new ParseException("Unknown statement type at line " + lineNum);
+	}
+	
+	private static void initCache(){
+		if(commands == null)
+			commands = new HashMap<String, StatementParser>();
+		if(operations == null){
+			operations = new HashMap<String, StatementParser>();
+			operations.put("is", new DeclarationParser());
+			operations.put("are", new DeclarationParser());
+		}
+	}
+	
+	/**
+	 * Register an action that is identified by the first word
+	 * @param keyword the keyword identifying this action
+	 * @param parser the parser for this action
+	 */
+	public static void registerCommand(String keyword, StatementParser parser){
+		initCache();
+		commands.put(keyword, parser);
+	}
+	
+	/**
+	 * Register an action that is identified by the second word
+	 * @param keyword the keyword identifying this action
+	 * @param parser the parser for this action
+	 */
+	public static void registerOperation(String keyword, StatementParser parser){
+		initCache();
+		operations.put(keyword, parser);
 	}
 	
 	public int getLineNum(){
