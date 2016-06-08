@@ -6,4 +6,10 @@ public interface Value{
 	public String evalAsString();
 	
 	public boolean evalAsBoolean();
+	
+	public Type getPresumedType();
+	
+	public enum Type{
+		NUMBER, STRING, BOOLEAN, NULL
+	}
 }

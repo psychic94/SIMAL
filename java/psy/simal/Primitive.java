@@ -40,5 +40,20 @@ public class Primitive implements Value, Property{
 		}
 		return value.length() > 0;
 	}
-
+	
+	@Override
+	public Type getPresumedType(){
+		if(value.equals("null"))
+			return Type.NULL;
+		else if(value.equals("true") || value.equals("false"))
+			return Type.BOOLEAN;
+		else{
+			try{
+				Double.parseDouble(value);
+				return Type.NUMBER;
+			}catch(NumberFormatException e){
+				return Type.STRING;
+			}
+		}
+	}
 }

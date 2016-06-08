@@ -1,5 +1,7 @@
 package psy.simal.parsing;
 
+import psy.simal.Dictionary;
+
 public class TerminalValue extends Expression{
 	private final String value;
 	
@@ -13,6 +15,9 @@ public class TerminalValue extends Expression{
 		try{
 			return Double.parseDouble(value);
 		}catch(NumberFormatException e){
+			if(Dictionary.isPrimitive(value)){
+				return Dictionary.getValue(value).evalAsNumber();
+			}
 			return 0;
 		}
 	}

@@ -32,9 +32,10 @@ import psy.simal.parsing.Parser;
 
 public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 	private static StudioApplet instance = null;
-	JSplitPane inOutPane;
+	JSplitPane cacheIoPane, inOutPane;
 	TextArea input;
 	TextArea output;
+	MemCacheTree cacheTree;
 	JMenuBar menuBar;
 	JMenu fileMenu, debugMenu;	
 	JMenuItem openFile, export, singleCommand;
@@ -104,6 +105,12 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		inOutPane.setTopComponent(output);
 		inOutPane.setResizeWeight(0.5);
 		inOutPane.setOneTouchExpandable(true);
+		
+		cacheIoPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		cacheTree = new MemCacheTree();
+		cacheIoPane.setLeftComponent(cacheTree);
+		cacheIoPane.setRightComponent(inOutPane);
+		cacheIoPane.setResizeWeight(0.2);
 		//End panel setup
 
 		//Start file chooser setup
@@ -127,7 +134,7 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		//End file chooser setup
 		
 		setJMenuBar(menuBar);
-		setContentPane(inOutPane);
+		setContentPane(cacheIoPane);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setSize(1200, 1000);
@@ -243,5 +250,9 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 			return 1;
 		else
 			return -1;
+	}
+	
+	public static MemCacheTree getCacheTree(){
+		return instance.cacheTree;
 	}
 }

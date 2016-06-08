@@ -39,8 +39,7 @@ public class Expression implements Value{
 	}
 	
 	public String evalAsString(){
-		//TODO
-		return "";
+		return toString();
 	}
 	
 	public boolean evalAsBoolean(){
@@ -51,6 +50,7 @@ public class Expression implements Value{
 		return "(" + left + operator + right + ")";
 	}
 	
+	@Deprecated
 	public static void main(String[] args){
 		String line = "";
 		for(String arg : args){
@@ -66,5 +66,9 @@ public class Expression implements Value{
 		}catch(ParseException e){
 			System.out.println(e.getMessage());
 		}	
+	}
+	
+	public Type getPresumedType(){
+		return Type.NUMBER;
 	}
 }
