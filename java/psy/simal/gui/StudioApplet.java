@@ -28,11 +28,12 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 	TextArea output;
 	JMenuBar menuBar;
 	JMenu fileMenu, debugMenu;	
-	JMenuItem openFile;
+	JMenuItem openFile, export, singleCommand;
 	JRadioButtonMenuItem tokenizeMode, parseMode;
-	JFileChooser fc;
+	JFileChooser openFC, saveFC, exportFC;
 	ButtonGroup debugModeGroup;
 	File activeFile;
+	FileNameExtensionFilter txtFilter, simaFilter, stlFilter, fbxFilter;
 	
 	public static void main(String[] args){
 		instance = new StudioApplet();
@@ -89,6 +90,26 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		inOutPane.setOneTouchExpandable(true);
 		//End panel setup
 
+		//Start file chooser setup
+		txtFilter = new FileNameExtensionFilter("Text File (.txt, .text)", "txt", "text");
+		simaFilter = new FileNameExtensionFilter("SIMAL Code File (.sima)", "sima");
+		stlFilter = new FileNameExtensionFilter("STL File (.stl)", "stl");
+		fbxFilter = new FileNameExtensionFilter("Maya Object File (.fbx)", "fbx");
+		
+		openFC = new JFileChooser();
+		openFC.addChoosableFileFilter(txtFilter);
+		openFC.addChoosableFileFilter(simaFilter);
+
+		saveFC = new JFileChooser();
+		saveFC.addChoosableFileFilter(txtFilter);
+		saveFC.addChoosableFileFilter(simaFilter);
+		
+		exportFC = new JFileChooser();
+		exportFC.setAcceptAllFileFilterUsed(false);
+		exportFC.addChoosableFileFilter(stlFilter);
+		//exportFC.addChoosableFileFilter(fbxFilter);
+		//End file chooser setup
+		
 		setJMenuBar(menuBar);
 		setContentPane(inOutPane);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -96,15 +117,14 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		setSize(1200, 1000);
 		setVisible(true);
 		
-		fc = new JFileChooser();
 		activeFile = null;
 	}
 	
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource().equals(openFile)){
-			int returnVal = fc.showOpenDialog(this);
+			int returnVal = openFC.showOpenDialog(this);
 			if(returnVal == JFileChooser.APPROVE_OPTION){
-				activeFile = fc.getSelectedFile();
+				activeFile = openFC.getSelectedFile();
 				try{
 					BufferedReader br = new BufferedReader(new FileReader(activeFile));
 					input.setText("");
