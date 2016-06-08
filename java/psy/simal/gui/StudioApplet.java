@@ -18,8 +18,13 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSplitPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import psy.simal.error.ParseException;
+import psy.simal.parsing.CodePart;
+import psy.simal.parsing.Parser;
 
 public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 	private static StudioApplet instance = null;
@@ -147,6 +152,14 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 			output = new ParserDebugPane();
 			inOutPane.setTopComponent(output);
 			//setContentPane(inOutPane);
+		}else if(e.getSource().equals(singleCommand)){
+			String cmd = JOptionPane.showInputDialog("Command to run:");
+			try{
+				CodePart codePart = Parser.parseLine(cmd);
+				codePart.run();
+			}catch(ParseException exception){
+				exception.printStackTrace();
+			}
 		}
 	}
 	
