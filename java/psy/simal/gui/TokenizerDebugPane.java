@@ -1,5 +1,6 @@
 package psy.simal.gui;
 
+import java.awt.Font;
 import java.awt.TextArea;
 import java.util.ArrayDeque;
 
@@ -13,6 +14,7 @@ public class TokenizerDebugPane extends TextArea{
 	
 	public TokenizerDebugPane(){
 		super();
+		this.setFont(new Font("Serif", Font.PLAIN, 24));
 		setEditable(false);
 		SwingUtilities.invokeLater(new OutputUpdater());
 	}

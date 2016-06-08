@@ -1,5 +1,6 @@
 package psy.simal.gui;
 
+import java.awt.Font;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -79,6 +80,7 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		
 		input = new TextArea();
 		input.addKeyListener(this);
+		input.setFont(new Font("Serif", Font.PLAIN, 24));
 		inOutPane.setBottomComponent(input);
 		
 		output = new TokenizerDebugPane();

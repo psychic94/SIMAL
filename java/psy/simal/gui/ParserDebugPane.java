@@ -1,5 +1,6 @@
 package psy.simal.gui;
 
+import java.awt.Font;
 import java.awt.TextArea;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class ParserDebugPane extends TextArea{
 	
 	public ParserDebugPane(){
 		super();
+		this.setFont(new Font("Serif", Font.PLAIN, 24));
 		setEditable(false);
 		SwingUtilities.invokeLater(new OutputUpdater());
 	}
