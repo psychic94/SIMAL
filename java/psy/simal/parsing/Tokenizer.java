@@ -150,7 +150,13 @@ public class Tokenizer{
 				boolean hasDecimal = false;
 				tokenStart=(pointer++);
 				while(true){
-					character = line.charAt(pointer);
+					try{
+						character = line.charAt(pointer);
+					}catch (StringIndexOutOfBoundsException e){
+						tokens.addLast(new Token(TokenType.NUMBER, line.substring(tokenStart, pointer), tokenStart));
+						tokenStart = pointer;
+						break;
+					}
 					if(Character.isDigit(character)){
 					}else if(character == '.'){
 						if(hasDecimal){
@@ -212,7 +218,7 @@ public class Tokenizer{
 		return tokens;
 	}
 	
-	public static void main(String[] args){
+	public static void test(String[] args){
 		String line = "";
 		for(String arg : args){
 			line += arg + " ";

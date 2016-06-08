@@ -2,10 +2,12 @@ package psy.simal.parsing.statements;
 
 import java.util.ArrayList;
 
+import psy.simal.Dictionary;
 import psy.simal.Face;
 import psy.simal.Value;
 import psy.simal.error.ParseException;
 import psy.simal.parsing.CodePart;
+import psy.simal.parsing.Expression;
 import psy.simal.parsing.Parser;
 import psy.simal.parsing.Token.TokenType;
 
@@ -40,7 +42,7 @@ public class Declaration extends Statement{
 			return new Declaration(parser.getLineNum(), ident, values);
 		}else if(parser.accept("a", true)){
 			if(parser.accept("Face", true)){
-				return Face.parse(parser);
+				return Face.parse(ident, parser);
 			}
 			return null;
 		}else{
@@ -51,8 +53,14 @@ public class Declaration extends Statement{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-
+		if(scalar)
+			if(scalarValue instanceof Expression)
+				Dictionary.setPrimitive(identifier, Double.toString(scalarValue.evalAsNumber()));
+			else{
+				Dictionary.setPrimitive(identifier, scalarValue.evalAsString());
+			}
+		else
+			Dictionary.registerArray(identifier, arrayValues);
 	}
 
 	@Override
