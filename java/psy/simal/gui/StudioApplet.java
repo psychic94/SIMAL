@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -22,6 +23,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSplitPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import psy.simal.compiling.FbxCompiler;
+import psy.simal.compiling.StlCompiler;
 import psy.simal.error.ParseException;
 import psy.simal.parsing.CodePart;
 import psy.simal.parsing.Parser;
@@ -62,6 +66,9 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		openFile = new JMenuItem("Open", KeyEvent.VK_O);
 		openFile.addActionListener(this);
 		fileMenu.add(openFile);
+		export = new JMenuItem("Export", KeyEvent.VK_E);
+		export.addActionListener(this);
+		fileMenu.add(export);
 		
 		//Debug Menu
 		debugModeGroup = new ButtonGroup();
@@ -79,6 +86,10 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 		parseMode.addActionListener(this);
 		debugModeGroup.add(parseMode);
 		debugMenu.add(parseMode);
+		singleCommand = new JMenuItem("Run Single Command");
+		singleCommand.setMnemonic(KeyEvent.VK_R);
+		singleCommand.addActionListener(this);
+		debugMenu.add(singleCommand);
 		//End menu bar setup
 		
 		//Start panel setup
@@ -143,6 +154,23 @@ public class StudioApplet extends JFrame implements ActionListener, KeyListener{
 				}catch(IOException ioe){
 					
 				}
+			}
+		}else if(e.getSource().equals(export)){
+			int returnVal = exportFC.showSaveDialog(this);
+			if(returnVal == JFileChooser.APPROVE_OPTION){
+				String name = exportFC.getSelectedFile().getName();
+				if(exportFC.getFileFilter().equals(stlFilter)){
+					String[] lines = input.getText().split("\n");
+					if(!name.endsWith(".stl")) name += ".stl";
+					StlCompiler.compile(lines, name);
+				}else if(exportFC.getFileFilter().equals(fbxFilter)){
+					//String[] lines = input.getText().split("\n");
+					//if(!name.endsWith(".fbx")) name += ".fbx";
+					//FbxCompiler.compile(lines, name);
+				}else
+					return;
+				
+				
 			}
 		}else if(e.getSource().equals(tokenizeMode) && !(output instanceof TokenizerDebugPane)){
 			output = new TokenizerDebugPane();
