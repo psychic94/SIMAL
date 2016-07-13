@@ -45,23 +45,29 @@ public class Parser{
 		return parseLine(Tokenizer.tokenizeLine(line, lineNum), lineNum);
 	}
 	
-	public static CodePart parseLine(ArrayDeque<Token> tokens, int lineNum) throws ParseException{
-		initCache();
-		if(tokens.size()<1)
+	public static CodePart parseLine(ArrayDeque<Token> tokens, int lineNum){
+		try{
+			initCache();
+			if(tokens.size()<1)
+				return null;
+			Parser instance = new Parser(tokens, lineNum);
+			//this line temporarily removes the first token so the second can be read
+			Token first = tokens.removeFirst();
+			Token second = tokens.peekFirst();
+			//add the first token back to the front of the dequeue
+			//included just in case the copy of tokens encapsulated in instance is also changed
+			tokens.addFirst(first);
+			if(commands.containsKey(first.getValue()))
+				return commands.get(first.getValue()).parse(instance);
+			else if(operations.containsKey(second.getValue()))
+				return operations.get(second.getValue()).parse(instance);
+			else
+				throw new ParseException("Unknown statement type at line " + lineNum);
+		}catch(Exception e){
+			System.out.println("Error parsing line " + lineNum);
+			e.printStackTrace();
 			return null;
-		Parser instance = new Parser(tokens, lineNum);
-		//this line temporarily removes the first token so the second can be read
-		Token first = tokens.removeFirst();
-		Token second = tokens.peekFirst();
-		//add the first token back to the front of the dequeue
-		//included just in case the copy of tokens encapsulated in instance is also changed
-		tokens.addFirst(first);
-		if(commands.containsKey(first.getValue()))
-			return commands.get(first.getValue()).parse(instance);
-		else if(operations.containsKey(second.getValue()))
-			return operations.get(second.getValue()).parse(instance);
-		else
-			throw new ParseException("Unknown statement type at line " + lineNum);
+		}
 	}
 	
 	private static void initCache(){

@@ -14,9 +14,10 @@ import psy.simal.parsing.Parser;
 
 public class StlCompiler extends SimalCompiler{
 	public static void compile(String[] lines, String filename){
-		for(String line : lines){
+		for(int i=0; i<lines.length; i++){
+			String line = lines[i];
 			try{
-				CodePart code = Parser.parseLine(line);
+				CodePart code = Parser.parseLine(line, i+1);
 				code.run();
 			}catch(ParseException e){
 				
